@@ -7,8 +7,9 @@ def upload_video(clientId="john", location="john's place", video_location=''):
         print('no video_location')
         return
     try:
+        file_format = video_location.split('.')[-1]
         #get presigned url
-        request_signed_url = 'https://fq1x9629yl.execute-api.ap-northeast-1.amazonaws.com/default/mitipa-upload-s3'
+        request_signed_url = 'https://fq1x9629yl.execute-api.ap-northeast-1.amazonaws.com/default/mitipa-upload-s3?format={}'.format(file_format)
         res = requests.get(url = request_signed_url)
         res = res.json()
 
