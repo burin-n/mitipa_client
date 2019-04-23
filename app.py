@@ -3,6 +3,7 @@ import sys
 import json
 import cv2
 import numpy as np
+import os
 
 
 def upload_video(clientId="john", location="john's place", video_location=''):
@@ -90,37 +91,26 @@ def upload_image(clientId="john", location="john's place", image_location=""):
         print('something went wrong')
 
 
-def getVideoFrame(video_location):
+def getVideoFrame(video_location, image_name='cache.jpg'):
     cap = cv2.VideoCapture(video_location)
     
-    # while(cap.isOpened()):
-    #     ret, frame = cap.read()
-        
-    #     if frame is not None:
-    #         cv2.imwrite('cache.jpg', frame)
-    #         break
-    #     else:
-    #         print('none')
-
-    # cap.release()
-
     while(cap.isOpened()):
         ret, frame = cap.read()
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-        cv2.imshow('frame',gray)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        
+        if frame is not None:
+            cv2.imwrite(image_name, frame)
             break
-
+        else:
+            print('none')
     cap.release()
-    cv2.destroyAllWindows()
+    return image_name
+
 
 
 if __name__ == '__main__':
     if(len(sys.argv) == 1):
         pass
     else:
-        if sys.argv[1].endswith('.jpg'):
-            upload_image( image_location=sys.argv[1],clientId=sys.argv[2], location=sys.argv[3])
-        else:
-            upload_video(video_location=sys.argv[1], clientId=sys.argv[2], location=sys.argv[3])
+        upload_image( image_location=sys.argv[1],clientId=sys.argv[2], location=sys.argv[3])
+        image_name = os.path.join(os.getcwd(), getVideoFrame(video_location=sys.argv[1]))
+        upload_video(video_location=sys.argv[1], clientId=sys.argv[2], location=image_name)
