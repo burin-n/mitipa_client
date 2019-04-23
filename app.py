@@ -86,7 +86,7 @@ def upload_image(clientId="john", location="john's place", image_location=""):
 
 if __name__ == '__main__':
     if(len(sys.argv) == 1):
-        # upload_video(video_location='/Users/chanokthornuerpairojkit/Desktop/401_1 cut.mp4')
-        upload_video(video_location='/Users/chanokthornuerpairojkit/Downloads/space1.jpg')
+        upload_video(video_location='/Users/chanokthornuerpairojkit/Desktop/401_1 cut.mp4')
+        # upload_video(video_location='/Users/chanokthornuerpairojkit/Downloads/')
     else:
         upload_video(video_location=sys.argv[1])
