@@ -7,6 +7,7 @@ def upload_video(clientId="john", location="john's place", video_location=''):
         print('no video_location')
         return
     try:
+        print(clientId, location, video_location)
         file_format = video_location.split('.')[-1]
         #get presigned url
         request_signed_url = 'https://fq1x9629yl.execute-api.ap-northeast-1.amazonaws.com/default/mitipa-upload-s3?format={}'.format(file_format)
@@ -48,4 +49,4 @@ if __name__ == '__main__':
     if(len(sys.argv) == 1):
         upload_video(video_location='/Users/burin/Desktop/john.mp4')
     else:
-        upload_video(video_location=sys.argv[1])
+        upload_video(video_location=sys.argv[1], clientId=sys.argv[2], location=sys.argv[3])
