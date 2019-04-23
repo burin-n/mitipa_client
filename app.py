@@ -50,7 +50,7 @@ def upload_image(clientId="john", location="john's place", image_location=""):
         print('no image_location')
         return
     try:
-        file_format = video_location.split('.')[-1]
+        file_format = image_location.split('.')[-1]
         #get presigned url
         request_signed_url = 'https://fq1x9629yl.execute-api.ap-northeast-1.amazonaws.com/default/mitipa-upload-s3?format={}'.format(file_format)
         res = requests.get(url = request_signed_url)
@@ -60,7 +60,7 @@ def upload_image(clientId="john", location="john's place", image_location=""):
         fileName = res['fileName']
 
         #upload video to S3
-        data = open(video_location, 'rb').read()
+        data = open(image_location, 'rb').read()
         res = requests.put(url=uploadURL, data=data)
         if(res.status_code == 200):
             print('success upload with fileName ' + fileName)
@@ -68,16 +68,16 @@ def upload_image(clientId="john", location="john's place", image_location=""):
             print('upload error')
             return
 
-        request_trigger_sqs = 'https://fq1x9629yl.execute-api.ap-northeast-1.amazonaws.com/default/appendsqs'
-        res = requests.put(url=request_trigger_sqs, data = json.dumps({ \
+        request_save_dynamo = 'https://fq1x9629yl.execute-api.ap-northeast-1.amazonaws.com/default/mitipa-upload-dynamo'
+        res = requests.put(url=request_save_dynamo, data = json.dumps({ \
                 "clientId" : clientId, \
                 "location" : location, \
-                "video" : fileName
+                "image" : fileName
             }))
         if(res.status_code == 200):
-            print('success append trigger to SQS')
+            print('success save to dynaomoDB')
         else:
-            print('trigger fail')
+            print('save fail')
             print(res.text)
             return    
 
@@ -87,6 +87,9 @@ def upload_image(clientId="john", location="john's place", image_location=""):
 
 if __name__ == '__main__':
     if(len(sys.argv) == 1):
-        
+        pass
     else:
-        upload_video(video_location=sys.argv[1], clientId=sys.argv[2], location=sys.argv[3])
+        if sys.argv[1].endswith('.jpg'):
+            upload_image( image_location=sys.argv[1],clientId=sys.argv[2], location=sys.argv[3])
+        else:
+            upload_video(video_location=sys.argv[1], clientId=sys.argv[2], location=sys.argv[3])
