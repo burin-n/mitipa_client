@@ -111,6 +111,4 @@ if __name__ == '__main__':
     if(len(sys.argv) == 1):
         pass
     else:
-        upload_image( image_location=sys.argv[1],clientId=sys.argv[2], location=sys.argv[3])
         image_name = os.path.join(os.getcwd(), getVideoFrame(video_location=sys.argv[1]))
-        upload_video(video_location=sys.argv[1], clientId=sys.argv[2], location=image_name)
