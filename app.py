@@ -1,6 +1,9 @@
 import requests
 import sys
 import json
+import cv2
+import numpy as np
+
 
 def upload_video(clientId="john", location="john's place", video_location=''):
     if(video_location == ''): 
@@ -45,6 +48,7 @@ def upload_video(clientId="john", location="john's place", video_location=''):
         print (E)
         print('something went wrong')
 
+
 def upload_image(clientId="john", location="john's place", image_location=""):
     if(image_location == ''): 
         print('no image_location')
@@ -84,6 +88,33 @@ def upload_image(clientId="john", location="john's place", image_location=""):
     except Exception as E:
         print (E)
         print('something went wrong')
+
+
+def getVideoFrame(video_location):
+    cap = cv2.VideoCapture(video_location)
+    
+    # while(cap.isOpened()):
+    #     ret, frame = cap.read()
+        
+    #     if frame is not None:
+    #         cv2.imwrite('cache.jpg', frame)
+    #         break
+    #     else:
+    #         print('none')
+
+    # cap.release()
+
+    while(cap.isOpened()):
+        ret, frame = cap.read()
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+        cv2.imshow('frame',gray)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()
+
 
 if __name__ == '__main__':
     if(len(sys.argv) == 1):
